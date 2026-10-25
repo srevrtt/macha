@@ -11,6 +11,228 @@
 		(company "Everett Sistrunk (Srevrtt)")
 	)
 	(lib_symbols
+		(symbol "Connector:Conn_01x03_Pin"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x03_Pin"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x03, script generated"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x03_Pin_1_1"
+				(rectangle
+					(start 0.8636 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 2.54) (xy 0.8636 2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 0.8636 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5.08 2.54 180)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 -2.54 180)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Connector:Micro_SD_Card_Det1"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -7022,12 +7244,32 @@
 		(uuid "faf9f2df-6af5-49f2-849d-2619d71e2184")
 	)
 	(no_connect
+		(at 104.14 157.48)
+		(uuid "08251abf-55db-4676-b2e1-c7c9d9a3aecc")
+	)
+	(no_connect
 		(at 30.48 158.75)
 		(uuid "146be0fe-0ee3-4e50-aa49-7975f13b90bb")
 	)
 	(no_connect
 		(at 30.48 168.91)
 		(uuid "17933d49-218b-4f32-9d25-0bb707dc1018")
+	)
+	(no_connect
+		(at 104.14 160.02)
+		(uuid "30701ada-15c5-4fad-93ec-fc35755592e2")
+	)
+	(no_connect
+		(at 149.86 152.4)
+		(uuid "3d7a1e83-5771-4069-99e5-048fbc85443b")
+	)
+	(no_connect
+		(at 149.86 144.78)
+		(uuid "3fc3373f-add6-45a6-9313-f224aa026971")
+	)
+	(no_connect
+		(at 149.86 147.32)
+		(uuid "4089795e-bbf2-4f6f-9812-e2ca82918c67")
 	)
 	(no_connect
 		(at 30.48 163.83)
@@ -7040,6 +7282,14 @@
 	(no_connect
 		(at 30.48 161.29)
 		(uuid "5272de01-d4ff-4c80-b7e7-1defeee38e65")
+	)
+	(no_connect
+		(at 149.86 162.56)
+		(uuid "558c809a-4c4c-4d24-9fad-95e75d5be2e9")
+	)
+	(no_connect
+		(at 149.86 149.86)
+		(uuid "61a2e36c-8de3-4bed-8bac-83c5c84ef734")
 	)
 	(no_connect
 		(at 30.48 156.21)
@@ -7058,8 +7308,20 @@
 		(uuid "7ea1f44a-e07d-413d-aa05-78cd08e094a6")
 	)
 	(no_connect
+		(at 149.86 132.08)
+		(uuid "84cd3131-5e38-4009-b319-8fffda2e9207")
+	)
+	(no_connect
+		(at 149.86 129.54)
+		(uuid "8d308659-1e75-4f9d-ad17-f94965145e71")
+	)
+	(no_connect
 		(at 220.98 29.21)
 		(uuid "8facfda3-615f-4fda-8efe-9b37dadb7071")
+	)
+	(no_connect
+		(at 149.86 157.48)
+		(uuid "abd9ce21-0a91-42a3-9fed-c82d8a3bdcc1")
 	)
 	(no_connect
 		(at 30.48 135.89)
@@ -7070,6 +7332,14 @@
 		(uuid "ad943c2c-0425-4e7d-9478-33bec6ea4e54")
 	)
 	(no_connect
+		(at 149.86 160.02)
+		(uuid "affd638a-cf80-446b-8166-970bdda6dd93")
+	)
+	(no_connect
+		(at 149.86 167.64)
+		(uuid "bf739521-266f-4702-883d-16c8ef807766")
+	)
+	(no_connect
 		(at 30.48 140.97)
 		(uuid "d5d3d76c-2811-4e23-ba1c-8ae5e76d08c6")
 	)
@@ -7078,8 +7348,34 @@
 		(uuid "d6c478dd-65d8-4bb0-8a50-559567d21f97")
 	)
 	(no_connect
+		(at 104.14 162.56)
+		(uuid "d92ae95f-0332-4cc9-918b-cdbe9d4dbf44")
+	)
+	(no_connect
+		(at 104.14 152.4)
+		(uuid "e7ae9979-2229-4e4b-833c-c7305e79176d")
+	)
+	(no_connect
+		(at 149.86 154.94)
+		(uuid "e7f8d0e1-5604-4ede-8685-c2d063e8c808")
+	)
+	(no_connect
+		(at 149.86 165.1)
+		(uuid "eb22ad15-a200-4dce-8ff8-9ace3e8ba0cc")
+	)
+	(no_connect
 		(at 220.98 46.99)
 		(uuid "f9b617c8-69c3-49cc-a3b6-2731c63dbff5")
+	)
+	(wire
+		(pts
+			(xy 101.6 134.62) (xy 104.14 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "009cb665-7906-478a-aadc-3f5206de50db")
 	)
 	(wire
 		(pts
@@ -8023,6 +8319,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 106.68) (xy 107.95 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9965c26b-42d6-4ef9-9311-b7c287b9ee0c")
+	)
+	(wire
+		(pts
 			(xy 121.92 102.87) (xy 121.92 106.68)
 		)
 		(stroke
@@ -8093,6 +8399,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 101.6) (xy 107.95 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a60f6781-12e8-4d84-ab03-82f168b81c5e")
+	)
+	(wire
+		(pts
 			(xy 217.17 123.19) (xy 214.63 123.19)
 		)
 		(stroke
@@ -8150,6 +8466,16 @@
 			(type default)
 		)
 		(uuid "a9334b98-932d-4439-bdb7-0c098b384770")
+	)
+	(wire
+		(pts
+			(xy 101.6 132.08) (xy 104.14 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9acb927-1488-4193-a18c-d8589f34398f")
 	)
 	(wire
 		(pts
@@ -8230,6 +8556,16 @@
 			(type default)
 		)
 		(uuid "af7bca6e-330a-49a8-af32-744671166606")
+	)
+	(wire
+		(pts
+			(xy 101.6 137.16) (xy 104.14 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aff211d7-1dca-4dec-9760-bf9c1885a088")
 	)
 	(wire
 		(pts
@@ -8603,6 +8939,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 104.14) (xy 107.95 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e1aea218-1387-482e-b5a4-ca3d27f4f774")
+	)
+	(wire
+		(pts
 			(xy 212.09 146.05) (xy 215.9 146.05)
 		)
 		(stroke
@@ -8941,6 +9287,16 @@
 		)
 		(uuid "4d2275f2-a492-4b16-bf64-438e7a067fd4")
 	)
+	(label "GPIO16"
+		(at 101.6 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "592a4576-2e15-4aca-b690-492f32f4d3f5")
+	)
 	(label "RD-"
 		(at 214.63 118.11 180)
 		(effects
@@ -8960,6 +9316,16 @@
 			(justify left bottom)
 		)
 		(uuid "60276f14-5967-492a-9289-cc01d86710be")
+	)
+	(label "GPIO17"
+		(at 107.95 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "60ebe007-8ca1-45b3-aaaf-5f8608a480bc")
 	)
 	(label "MOSI1"
 		(at 151.13 137.16 0)
@@ -9151,6 +9517,16 @@
 		)
 		(uuid "d3a941f5-7016-424f-9ccf-e5075266579b")
 	)
+	(label "GPIO17"
+		(at 101.6 134.62 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d748ebff-5156-4be1-8fd3-fa6fd2652590")
+	)
 	(label "TXN"
 		(at 63.5 118.11 0)
 		(effects
@@ -9191,6 +9567,26 @@
 		)
 		(uuid "df132cea-3d78-4319-8a3f-629b4edf8b74")
 	)
+	(label "GPIO16"
+		(at 107.95 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e2c1a729-2392-4c8c-a662-71a1de3096f4")
+	)
+	(label "GPIO18"
+		(at 101.6 137.16 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e680e35d-f98e-4918-93da-81dcabd40989")
+	)
 	(label "MISO1"
 		(at 215.9 44.45 180)
 		(effects
@@ -9210,6 +9606,16 @@
 			(justify right bottom)
 		)
 		(uuid "f3b50e9a-eac9-4b24-9242-df89493f67e7")
+	)
+	(label "GPIO18"
+		(at 107.95 106.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f42bb963-23e6-4f96-adea-fefd7b9a04cf")
 	)
 	(label "TXN"
 		(at 63.5 128.27 0)
@@ -9263,7 +9669,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 156.21 36.5252 0)
 			(hide yes)
 			(show_name no)
@@ -9421,7 +9827,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_SMD:D_SMA"
 			(at 27.94 30.48 0)
 			(hide yes)
 			(show_name no)
@@ -9901,7 +10307,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 200.3552 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -10179,7 +10585,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 70.8152 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -10259,7 +10665,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 24.13 42.8752 0)
 			(hide yes)
 			(show_name no)
@@ -10509,7 +10915,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 119.38 65.278 90)
 			(hide yes)
 			(show_name no)
@@ -10670,7 +11076,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 215.138 78.74 90)
 			(hide yes)
 			(show_name no)
@@ -10984,7 +11390,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 71.12 165.4048 0)
 			(hide yes)
 			(show_name no)
@@ -11066,7 +11472,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 194.818 78.74 90)
 			(hide yes)
 			(show_name no)
@@ -11552,7 +11958,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 187.6552 153.67 0)
 			(hide yes)
 			(show_name no)
@@ -11632,7 +12038,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4125-xx-x-0190_6P_TopMnt_Horizontal"
 			(at 60.96 34.29 0)
 			(hide yes)
 			(show_name no)
@@ -11729,7 +12135,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 129.2352 39.37 0)
 			(hide yes)
 			(show_name no)
@@ -12435,7 +12841,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 204.978 78.74 90)
 			(hide yes)
 			(show_name no)
@@ -12517,7 +12923,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 83.312 52.07 90)
 			(hide yes)
 			(show_name no)
@@ -13065,7 +13471,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 77.47 162.8648 0)
 			(hide yes)
 			(show_name no)
@@ -13225,7 +13631,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Diode_SMD:D_SMA"
 			(at 107.95 35.56 0)
 			(hide yes)
 			(show_name no)
@@ -13307,7 +13713,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0201_0603Metric_Pad0.64x0.40mm_HandSolder"
 			(at 74.422 52.07 90)
 			(hide yes)
 			(show_name no)
@@ -13387,7 +13793,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 81.28 163.068 90)
 			(hide yes)
 			(show_name no)
@@ -13625,7 +14031,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 61.2648 172.72 0)
 			(hide yes)
 			(show_name no)
@@ -13941,7 +14347,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 56.1848 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -14224,6 +14630,89 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:Conn_01x03_Pin")
+		(at 97.79 104.14 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "deee8314-c252-457e-8f62-9c54d6ae12a6")
+		(property "Reference" "J1"
+			(at 98.425 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03_Pin"
+			(at 98.425 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+			(at 97.79 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 97.79 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 97.79 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7ce97b89-ab58-44e6-a4ae-e306835bc80c")
+		)
+		(pin "2"
+			(uuid "a285fc94-e81e-42f8-986a-ca415db6c3cc")
+		)
+		(pin "3"
+			(uuid "30e34f3c-6d59-425a-8b0a-ca22836884db")
+		)
+		(instances
+			(project "mainboard"
+				(path "/f3e8c636-9c5a-4402-a02e-511b82f0062f"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 199.39 154.94 0)
 		(unit 1)
@@ -14333,7 +14822,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Card:microSD_HC_Hirose_DM3BT-DSF-PEJS"
 			(at 295.91 21.59 0)
 			(hide yes)
 			(show_name no)
@@ -14439,7 +14928,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 184.658 78.74 90)
 			(hide yes)
 			(show_name no)
@@ -14753,7 +15242,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_1812_4532Metric"
 			(at 123.19 73.9648 0)
 			(hide yes)
 			(show_name no)
@@ -15067,7 +15556,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0201_0603Metric"
 			(at 199.39 34.5948 0)
 			(hide yes)
 			(show_name no)
@@ -15381,7 +15870,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 156.21 110.49 0)
 			(hide yes)
 			(show_name no)
@@ -15574,7 +16063,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
 			(at 63.5 77.47 0)
 			(hide yes)
 			(show_name no)
