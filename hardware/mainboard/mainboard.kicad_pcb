@@ -146,9 +146,9 @@
 			(subtractmaskfromsilk no)
 			(outputformat 1)
 			(mirror no)
-			(drillshape 1)
+			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "")
+			(outputdirectory "../../../pcbs/")
 		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric"
@@ -7700,6 +7700,7 @@
 		(property "Value" "Conn_01x03_Pin"
 			(at 0 7.46 90)
 			(layer "F.Fab")
+			(hide yes)
 			(uuid "20223381-0d7e-4520-b3dc-e60dd56340fa")
 			(effects
 				(font
@@ -12198,6 +12199,19 @@
 		)
 		(layer "Edge.Cuts")
 		(uuid "6688df46-c8a0-4831-ac46-cd137655f487")
+	)
+	(gr_text "Macha Mainboard v0.1.0"
+		(at 120.15 70.025 0)
+		(layer "Dwgs.User")
+		(uuid "266c39d8-ea1c-4e98-89c0-7db4679ed681")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.25)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
 	)
 	(segment
 		(start 138.55 115.175)

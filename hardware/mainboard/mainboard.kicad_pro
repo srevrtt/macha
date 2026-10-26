@@ -524,7 +524,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "mainboard.net",
-      "plot": "",
+      "plot": "../../../pcbs/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
