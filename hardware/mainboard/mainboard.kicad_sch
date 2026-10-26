@@ -7359,10 +7359,6 @@
 		(uuid "30701ada-15c5-4fad-93ec-fc35755592e2")
 	)
 	(no_connect
-		(at 149.86 152.4)
-		(uuid "3d7a1e83-5771-4069-99e5-048fbc85443b")
-	)
-	(no_connect
 		(at 149.86 144.78)
 		(uuid "3fc3373f-add6-45a6-9313-f224aa026971")
 	)
@@ -7385,10 +7381,6 @@
 	(no_connect
 		(at 149.86 162.56)
 		(uuid "558c809a-4c4c-4d24-9fad-95e75d5be2e9")
-	)
-	(no_connect
-		(at 149.86 149.86)
-		(uuid "61a2e36c-8de3-4bed-8bac-83c5c84ef734")
 	)
 	(no_connect
 		(at 30.48 156.21)
@@ -7417,10 +7409,6 @@
 	(no_connect
 		(at 220.98 29.21)
 		(uuid "8facfda3-615f-4fda-8efe-9b37dadb7071")
-	)
-	(no_connect
-		(at 149.86 157.48)
-		(uuid "abd9ce21-0a91-42a3-9fed-c82d8a3bdcc1")
 	)
 	(no_connect
 		(at 30.48 135.89)
@@ -7453,10 +7441,6 @@
 	(no_connect
 		(at 104.14 152.4)
 		(uuid "e7ae9979-2229-4e4b-833c-c7305e79176d")
-	)
-	(no_connect
-		(at 149.86 154.94)
-		(uuid "e7f8d0e1-5604-4ede-8685-c2d063e8c808")
 	)
 	(no_connect
 		(at 149.86 165.1)
@@ -8198,6 +8182,16 @@
 	)
 	(wire
 		(pts
+			(xy 151.13 149.86) (xy 149.86 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bc814eb-3f40-40ba-b788-af2a0032b1ad")
+	)
+	(wire
+		(pts
 			(xy 60.96 120.65) (xy 63.5 120.65)
 		)
 		(stroke
@@ -8205,6 +8199,16 @@
 			(type default)
 		)
 		(uuid "7bfbcf65-67a8-4d8e-9191-e7c7afdada9f")
+	)
+	(wire
+		(pts
+			(xy 151.13 154.94) (xy 149.86 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7eb61e00-bb3e-4fd2-88b8-ef05ebd0a3fc")
 	)
 	(wire
 		(pts
@@ -8738,6 +8742,16 @@
 	)
 	(wire
 		(pts
+			(xy 151.13 157.48) (xy 149.86 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "beb13b94-87ce-4972-a91f-5f1e244fe515")
+	)
+	(wire
+		(pts
 			(xy 219.71 135.89) (xy 199.39 135.89)
 		)
 		(stroke
@@ -9198,6 +9212,16 @@
 	)
 	(wire
 		(pts
+			(xy 151.13 152.4) (xy 149.86 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc1f2bb3-e682-4364-bb57-d29dffce638a")
+	)
+	(wire
+		(pts
 			(xy 67.31 77.47) (xy 69.85 77.47)
 		)
 		(stroke
@@ -9236,7 +9260,7 @@
 		)
 		(uuid "091632af-e802-4cec-a323-c0305e1a3c26")
 	)
-	(label "MOSI"
+	(label "MOSI2"
 		(at 25.4 125.73 180)
 		(effects
 			(font
@@ -9276,7 +9300,7 @@
 		)
 		(uuid "189fa70c-3754-47e1-9821-9398cce21ffb")
 	)
-	(label "RD-"
+	(label "RXN"
 		(at 213.36 86.36 180)
 		(effects
 			(font
@@ -9306,7 +9330,7 @@
 		)
 		(uuid "2a947a89-5518-4835-ac13-28ed86dcfd9c")
 	)
-	(label "TD-"
+	(label "TXN"
 		(at 193.04 86.36 180)
 		(effects
 			(font
@@ -9335,6 +9359,16 @@
 			(justify right bottom)
 		)
 		(uuid "32a7bf7b-78be-4fed-9a7e-84b4512024c2")
+	)
+	(label "MOSI2"
+		(at 151.13 157.48 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "40d5652c-85a9-494e-b87d-a2f97ac4e422")
 	)
 	(label "ACTLED"
 		(at 265.43 138.43 0)
@@ -9436,6 +9470,16 @@
 		)
 		(uuid "675dbc95-6116-47bd-9c9a-e3112087e578")
 	)
+	(label "CS2"
+		(at 151.13 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6aa462f8-e4e8-4477-af9f-add77622b7ec")
+	)
 	(label "GPIO19"
 		(at 153.67 40.64 180)
 		(effects
@@ -9486,7 +9530,7 @@
 		)
 		(uuid "81405ce9-aa53-4484-aa8b-d23f4169ff1e")
 	)
-	(label "TXN"
+	(label "RXN"
 		(at 63.5 125.73 0)
 		(effects
 			(font
@@ -9515,6 +9559,16 @@
 			(justify right bottom)
 		)
 		(uuid "90f79935-9259-47ac-85b5-e510bbfc8c0e")
+	)
+	(label "MISO2"
+		(at 151.13 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "924f3a9b-ca54-442c-bcc1-ae7f0a35919b")
 	)
 	(label "XOUT"
 		(at 74.93 77.47 0)
@@ -9576,7 +9630,17 @@
 		)
 		(uuid "b524a91c-16cd-4277-a5b9-862344c58ff9")
 	)
-	(label "RD+"
+	(label "SCK2"
+		(at 151.13 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b57a6fe5-4f90-4661-93be-adf7ec812dd3")
+	)
+	(label "RXP"
 		(at 203.2 86.36 180)
 		(effects
 			(font
@@ -9606,7 +9670,7 @@
 		)
 		(uuid "d32cd04d-9c5d-459d-a048-f82cc6c750cc")
 	)
-	(label "TD+"
+	(label "TXP"
 		(at 182.88 86.36 180)
 		(effects
 			(font
@@ -9716,7 +9780,7 @@
 		)
 		(uuid "f42bb963-23e6-4f96-adea-fefd7b9a04cf")
 	)
-	(label "TXN"
+	(label "RXP"
 		(at 63.5 128.27 0)
 		(effects
 			(font
