@@ -5,6 +5,15 @@
 
 #include "include/window.h"
 
+struct mach_window_t {
+	int width;
+	int height;
+	int should_close;
+#if defined(__APPLE__) && defined(__MACH__)
+	mach_mac_window_t *handle;
+#endif
+};
+
 mach_window_t *mach_window_create(int width, int height, char *title) {
 	mach_window_t *window = malloc(sizeof(mach_window_t));
 
@@ -17,6 +26,10 @@ mach_window_t *mach_window_create(int width, int height, char *title) {
 #endif
 
 	return window;
+}
+
+int mach_window_should_close(mach_window_t *self) {
+		return self->should_close;
 }
 
 /* performs a window-wide event polling operation; called every frame */

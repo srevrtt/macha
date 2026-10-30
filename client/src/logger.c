@@ -88,13 +88,13 @@ void mach_logger_log(mach_logger_t *self, mach_log_level_t level,
     }
 
     /* prepare the message */
-    char message[MAX_LOG_SIZE + 25];
+    char message[MAX_LOG_SIZE + 24];
 
     /* I know this is very confusing, but it's really just a bunch of
        conditional formatting; it'll make sense eventually, I promise */
-    snprintf(message, MAX_LOG_SIZE + 25, "%s%s: %s%c\n", truncated ?
+    snprintf(message, MAX_LOG_SIZE + 24, "%s%s: %s%c", truncated ?
             "[TRUNCATED] " : "", logLevelStr, buffer, (level == MACH_LOG_ERROR ||
-                level == MACH_LOG_CRITICAL) ? '!' : '\0');
+                level == MACH_LOG_CRITICAL) ? '!' : '.');
 
     /* now we can actually write it to the log file */
     size_t written_items = fwrite(message, sizeof(char),

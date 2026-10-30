@@ -23,6 +23,7 @@ endif()
 set(SRCS
 	${EXTERNAL_SRCS}
 	${PLATFORM_SRCS}
+    src/app.c
     src/logger.c
 	src/window.c
 	src/main.c
