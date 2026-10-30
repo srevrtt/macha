@@ -8,12 +8,19 @@
 
 struct mach_logger_t {
     FILE *log_file;
-	bool write_to_console;
+    bool write_to_console;
+    bool error_flag;
+    char *flag_msg;
+    unsigned int flag_msg_size;
 };
 
 mach_logger_t *mach_logger_create(const char *log_path, int log_to_console) {
-	mach_logger_t *logger = malloc(sizeof(mach_logger_t));
+    /* initialize the logger object */
+	  mach_logger_t *logger = malloc(sizeof(mach_logger_t));
     logger->write_to_console = log_to_console;
+    logger->flag_msg_size = 64;
+    logger->flag_msg = malloc(logger->flag_msg_size * sizeof(char));
+    logger->error_flag = false;
 
     /* open a dummy file handle to clear the existing log file if it exists */
     FILE *dummy_fp = fopen(log_path, "w");
@@ -120,10 +127,63 @@ void mach_logger_log(mach_logger_t *self, mach_log_level_t level,
     }
 }
 
+/* used for easier error handling; if there's an error, a function can use this
+   function to set an error message that can later be read anywhere using
+   `mach_logger_get_flag()` */
+void mach_logger_set_flag(mach_logger_t *self, const char *flag) {
+    self->error_flag = true;
+
+    if (!flag) {
+        return;
+    }
+
+    unsigned int len = strlen(flag);
+
+    /* resize the flag message buffer if needed */
+    if (self->flag_msg_size <= len) {
+        self->flag_msg_size = len + 1;
+        self->flag_msg = calloc(self->flag_msg_size,
+                sizeof(char));
+
+        if (self->flag_msg == NULL) {
+            mach_logger_log(self, MACH_LOG_ERROR, "Failed to "
+                    "initialize the logger error flag message buffer of size "
+                    "%lu. Continuing, but please note this *might* cause "
+                    "memory corruption and/or undefined behavior later on",
+                    self->flag_msg_size);
+            return;
+        }
+    }
+
+    /* copy the provided message to the internal log flag message buffer */
+    strncpy(self->flag_msg, flag, self->flag_msg_size);
+}
+
+/* gets the flag message from the logger; useful for error handling; `len` is
+   OPTIONAL (i.e. can be NULL); it's only needed if you need to know the length
+   of the flag message; this function returns NULL if there is no error flag */
+char *mach_logger_get_flag(mach_logger_t *self, unsigned int *len) {
+    if (!self->error_flag) {
+        return NULL;
+    }
+
+    if (len) {
+        *len = self->flag_msg_size;
+    }
+
+    return self->flag_msg;
+}
+
+/* clears the logger's error flag; use this only if it is safe to proceed */
+void mach_logger_clear_flag(mach_logger_t *self) {
+    self->error_flag = false;
+}
+
 /* safely destroys and deallocates the logger */
 void mach_logger_destroy(mach_logger_t *self) {
     if (self->log_file) {
         fclose(self->log_file);
+        free(self->flag_msg);
         free(self);
         self = NULL;
     }

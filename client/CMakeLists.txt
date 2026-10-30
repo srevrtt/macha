@@ -20,6 +20,18 @@ if(APPLE)
 	set(CMAKE_C_LINK_FLAGS "${CMAKE_C_LINK_FLAGS} -framework Foundation -framework Cocoa")
 endif()
 
+# Enable address and leak sanitizers if we're doing a Debug build
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(SAN_FLAGS
+        -fsanitize=address
+        -fno-omit-frame-pointer
+        -g
+    )
+
+    add_compile_options(${SAN_FLAGS})
+    add_link_options(${SAN_FLAGS})
+endif()
+
 set(SRCS
 	${EXTERNAL_SRCS}
 	${PLATFORM_SRCS}

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "include/app.h"
 #include "include/window.h"
@@ -30,8 +31,18 @@ mach_app_t *mach_app_create() {
 
     /* create the window */
     mach_logger_log(app->logger, MACH_LOG_INFO, "Creating window..");
-    app->window = mach_window_create(MACH_WINDOW_WIDTH,
+    app->window = mach_window_create(app->logger, MACH_WINDOW_WIDTH,
             MACH_WINDOW_HEIGHT, MACH_WINDOW_TITLE);
+
+    /* window error handling (if applicable) */
+    char *window_create_flag = mach_logger_get_flag(app->logger, NULL);
+    if (window_create_flag && strcmp(window_create_flag,
+                "WINDOW_CREATION_FAILED")) {
+        mach_logger_log(app->logger, MACH_LOG_ERROR,
+                "Cannot proceed; native Window creation failed!");
+        mach_logger_destroy(app->logger);
+    }
+
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Window created successfully");
 

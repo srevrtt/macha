@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "include/logger.h"
 #include "include/mac_window.h"
-
 #include "include/window.h"
 
 struct mach_window_t {
@@ -14,7 +14,7 @@ struct mach_window_t {
 #endif
 };
 
-mach_window_t *mach_window_create(int width, int height, char *title) {
+mach_window_t *mach_window_create(mach_logger_t *logger, int width, int height, char *title) {
 	mach_window_t *window = malloc(sizeof(mach_window_t));
 
 	window->width = width;
@@ -22,7 +22,7 @@ mach_window_t *mach_window_create(int width, int height, char *title) {
 	window->should_close = false;
 
 #if defined(__APPLE__) && defined(__MACH__)
-	window->handle = mach_mac_window_create(width, height, title);
+	window->handle = mach_mac_window_create(logger, width, height, title);
 #endif
 
 	return window;

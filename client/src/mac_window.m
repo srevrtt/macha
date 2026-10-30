@@ -6,6 +6,7 @@
 #include <sys/resource.h>
 #import <Cocoa/Cocoa.h>
 
+#include "include/logger.h"
 #include "include/mac_window.h"
 
 /* global variables */
@@ -28,10 +29,10 @@ static int g_macWindowShouldClose = 0;
 - (void)run {
 	@autoreleasepool {
 		NSEvent *event = [self
-							nextEventMatchingMask:NSEventMaskAny
-							untilDate:[NSDate distantFuture]
-							inMode:NSDefaultRunLoopMode
-							dequeue:YES];
+				            nextEventMatchingMask:NSEventMaskAny
+				            untilDate:[NSDate distantFuture]
+				            inMode:NSDefaultRunLoopMode
+				            dequeue:YES];
 		[self sendEvent:event];
 		[self updateWindows];
 	}
@@ -53,7 +54,8 @@ struct mach_mac_window_t {
 #endif
 };
 
-mach_mac_window_t *mach_mac_window_create(int width, int height, char *title) {
+mach_mac_window_t *mach_mac_window_create(mach_logger_t *logger, int width,
+	    int height, char *title) {
 	mach_mac_window_t *window = malloc(sizeof(mach_mac_window_t));
 
 	@autoreleasepool {
@@ -71,15 +73,17 @@ mach_mac_window_t *mach_mac_window_create(int width, int height, char *title) {
 		/* create the window */
 		NSRect windowRect = NSMakeRect(0, 0, width, height);
 		window->ns_window = [[NSWindow alloc] initWithContentRect:windowRect
-												styleMask:styles
-												backing:NSBackingStoreBuffered
-												defer:NO];
+									    		styleMask:styles
+											    backing:NSBackingStoreBuffered
+							            		defer:NO];
 		[window->ns_window center];
 
 		/* error handling */
 		if (window->ns_window == nil) {
-			NSLog(@"ERROR: Failed to create an NSWindow!");
-			exit(EXIT_FAILURE);
+			mach_logger_log(logger, MACH_LOG_CRITICAL,
+                    "Objective-C: Failed to create an NSWindow!");
+            mach_logger_set_flag(logger, "WINDOW_CREATION_FAILED");
+            return NULL;
 		}
 
 		/* window configuration */
@@ -89,7 +93,7 @@ mach_mac_window_t *mach_mac_window_create(int width, int height, char *title) {
 		[window->ns_window orderFrontRegardless];
 
 		window->window = (void*)window->ns_window;
-	}
+    }
 
 	return window;
 }
@@ -101,8 +105,8 @@ int mach_mac_window_should_close(mach_mac_window_t *window) {
 
 void mach_mac_window_poll(mach_mac_window_t *window) {
 	NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny
-							untilDate:nil
-							inMode:NSDefaultRunLoopMode
+						    untilDate:nil
+					    	inMode:NSDefaultRunLoopMode
 						    dequeue:(YES)];
 	[NSApp sendEvent:event];
 	[NSApp updateWindows];

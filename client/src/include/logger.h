@@ -15,6 +15,9 @@ typedef enum {
 mach_logger_t *mach_logger_create(const char *log_path, int log_to_console);
 void mach_logger_log(mach_logger_t *self, mach_log_level_t level,
 		const char *fmt, ...);
+void mach_logger_set_flag(mach_logger_t *self, const char *flag);
+char *mach_logger_get_flag(mach_logger_t *self, unsigned int *len);
+void mach_logger_clear_flag(mach_logger_t *self);
 void mach_logger_destroy(mach_logger_t *self);
 
 #endif
