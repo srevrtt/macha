@@ -45,6 +45,16 @@ set(SRCS
 
 add_executable(macha_client ${SRCS})
 
+# Convert the GLSL shader source code files to C headers
+add_custom_command(
+    TARGET macha_client
+    PRE_BUILD
+    COMMAND echo "Converting GLSL shaders to C headers for compilation..."
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/convert_shaders.sh
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    VERBATIM
+)
+
 target_include_directories(macha_client PRIVATE external/)
 target_link_libraries(macha_client PRIVATE PkgConfig::cglm ${APPLE_FRAMEWORKS})
 
