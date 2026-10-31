@@ -16,8 +16,10 @@ if(APPLE)
 		src/mac_window.m
 	)
 
-	# TODO: ???
-	set(CMAKE_C_LINK_FLAGS "${CMAKE_C_LINK_FLAGS} -framework Foundation -framework Cocoa")
+    # Disable OpenGL deprecation for Apple devices
+    add_definitions(-Wno-deprecated-declarations)
+
+    set(APPLE_FRAMEWORKS "-framework Foundation -framework Cocoa")
 endif()
 
 # Enable address and leak sanitizers if we're doing a Debug build
@@ -33,16 +35,16 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 set(SRCS
-	${EXTERNAL_SRCS}
-	${PLATFORM_SRCS}
     src/app.c
     src/logger.c
 	src/window.c
 	src/main.c
+	${EXTERNAL_SRCS}
+	${PLATFORM_SRCS}
 )
 
 add_executable(macha_client ${SRCS})
 
 target_include_directories(macha_client PRIVATE external/)
-target_link_libraries(macha_client PRIVATE PkgConfig::cglm)
+target_link_libraries(macha_client PRIVATE PkgConfig::cglm ${APPLE_FRAMEWORKS})
 

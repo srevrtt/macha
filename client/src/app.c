@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include <glad/glad.h>
+
 #include "include/app.h"
 #include "include/window.h"
 #include "include/logger.h"
@@ -46,12 +48,26 @@ mach_app_t *mach_app_create() {
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Window created successfully");
 
+    /* set the OpenGL viewport */
+    glViewport(0, 0, MACH_WINDOW_WIDTH,
+            MACH_WINDOW_HEIGHT);
+
     return app;
 }
 
 void mach_app_run(mach_app_t *self) {
     while (!mach_window_should_close(self->window)) {
         mach_window_update(self->window);
+
+        /* clear the screen each frame */
+        glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        /* draw the objects on the back buffer */
+        // ...
+
+        /* swap the buffers to render the objects */
+        mach_window_swap_buffers(self->window);
     }
 }
 
