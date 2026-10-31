@@ -10,6 +10,9 @@ set(EXTERNAL_SRCS
 	external/glad/glad.c
 )
 
+# Create the shaders directory
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/include/shaders")
+
 # Set platform-specific source files
 if(APPLE)
 	set(PLATFORM_SRCS
@@ -43,17 +46,33 @@ set(SRCS
 	${PLATFORM_SRCS}
 )
 
+# Relative to ./res/shaders/
+set(SHADER_SRCS
+    square.vert
+    square.frag
+)
+
 add_executable(macha_client ${SRCS})
 
 # Convert the GLSL shader source code files to C headers
-add_custom_command(
-    TARGET macha_client
-    PRE_BUILD
-    COMMAND echo "Converting GLSL shaders to C headers for compilation..."
-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/convert_shaders.sh
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    VERBATIM
+set(SHADER_OUTPUTS "")
+foreach(file_path IN LISTS SHADER_SRCS)
+    set(OUTPUT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/src/include/shaders/${file_path}.h")
+    add_custom_command(
+        OUTPUT "${OUTPUT_FILE}"
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/convert_shader.sh "${file_path}" "${OUTPUT_FILE}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/res/shaders/${file_path}"
+        VERBATIM
+    )
+    list(APPEND SHADER_OUTPUTS "${OUTPUT_FILE}")
+endforeach()
+
+add_custom_target(run_shader_conversion
+    ALL
+    DEPENDS ${SHADER_OUTPUTS}
 )
+
+add_dependencies(macha_client run_shader_conversion)
 
 target_include_directories(macha_client PRIVATE external/)
 target_link_libraries(macha_client PRIVATE PkgConfig::cglm ${APPLE_FRAMEWORKS})
