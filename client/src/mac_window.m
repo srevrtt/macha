@@ -151,6 +151,20 @@ void mach_mac_window_gl_swap(mach_mac_window_t *window) {
     [window->ns_glctx flushBuffer];
 }
 
+/* gets the drawable size in pixels; this is due to the behavior of Apple's
+   retina displays */
+void mach_mac_window_fb_size(mach_mac_window_t *window, int *width,
+        int *height) {
+    @autoreleasepool {
+        NSView *content_view = [window->ns_window contentView];
+        NSRect bounds = [content_view bounds];
+        NSRect backingBounds = [content_view convertRectToBacking:bounds];
+
+        *width = backingBounds.size.width;
+        *height = backingBounds.size.height;
+    }
+}
+
 /* helper function */
 int mach_mac_window_should_close(mach_mac_window_t *window) {
     return g_macWindowShouldClose;

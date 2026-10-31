@@ -48,13 +48,26 @@ mach_app_t *mach_app_create() {
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Window created successfully");
 
+    /* before creating the renderer, we need to get the actual, usable
+       rendering width and height, mostly for Apple Retina screens */
+    int width = 0, height = 0;
+    mach_window_get_size(app->window, &width, &height);
+
     /* create and initialize the renderer */
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Initializing the application renderer..");
-    app->renderer = mach_renderer_create(MACH_WINDOW_WIDTH,
-            MACH_WINDOW_HEIGHT, app->logger);
+    app->renderer = mach_renderer_create(width, height, app->logger);
 
-    // TODO: error handling
+    /* handle if something happened and the renderer failed to initialize */
+    if (app->renderer == NULL) {
+        mach_logger_log(app->logger, MACH_LOG_CRITICAL,
+                "Failed to initialize the application renderer");
+        return NULL;
+    }
+
+    /* otherwise, we're all good! */
+    mach_logger_log(app->logger, MACH_LOG_INFO,
+            "The application renderer has been initialized successully");
 
     return app;
 }

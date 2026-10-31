@@ -35,10 +35,23 @@ mach_renderer_t *mach_renderer_create(int width, int height,
             ___res_shaders_square_vert_len,
             ___res_shaders_square_frag_len);
 
-    // TODO: error handling
+    /* handle errors if the shader creation failed */
+    if (renderer->shader == NULL) {
+        mach_logger_log(logger, MACH_LOG_CRITICAL,
+                "GL Renderer: Shader creation failed with flag %s",
+                mach_logger_get_flag(logger, NULL));
+        return NULL;
+    }
 
-    mach_logger_log(logger, MACH_LOG_INFO,
-            "Current GL error: %d (should be 0 instead)", glGetError());
+    /* check for OpenGL errors */
+    int error = glGetError();
+
+    if (error != GL_NO_ERROR) {
+        mach_logger_log(logger, MACH_LOG_CRITICAL,
+                "GL Renderer: An OpenGL error has been detected: GL Error %d",
+                error);
+        return NULL;
+    }
 
     return renderer;
 }

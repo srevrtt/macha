@@ -38,6 +38,12 @@ int mach_window_should_close(mach_window_t *self) {
     return self->should_close;
 }
 
+void mach_window_get_size(mach_window_t *self, int *width, int *height) {
+#if defined(__APPLE__) && defined(__MACH__)
+    mach_mac_window_fb_size(self->handle, width, height);
+#endif
+}
+
 /* performs a window-wide event polling operation; called every frame */
 void mach_window_update(mach_window_t *self) {
 #if defined(__APPLE__) && defined(__MACH__)
