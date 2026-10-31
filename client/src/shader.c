@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include <cglm/cglm.h>
 #include <glad/glad.h>
 
 #include "include/logger.h"
@@ -112,6 +113,18 @@ mach_shader_t *mach_shader_create(mach_logger_t *logger,
     glDeleteShader(fragment_shader);
 
     return shader;
+}
+
+/* helper function to inject a uniform mat4 into the shader */
+void mach_shader_mat4(mach_shader_t *self, const char *name, mat4 m) {
+    int location = glGetUniformLocation(self->shader, name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, m[0]);
+}
+
+/* helper function to inject a uniform vec3 into the shader */
+void mach_shader_vec3(mach_shader_t *self, const char *name, vec3 v) {
+    int location = glGetUniformLocation(self->shader, name);
+    glUniform3fv(location, 1, v);
 }
 
 /* simply calls `glUseProgram` on the internal shader program */

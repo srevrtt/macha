@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include <cglm/cglm.h>
 #include <glad/glad.h>
 
 #include "include/logger.h"
@@ -13,6 +14,7 @@
 struct mach_renderer_t {
     mach_shader_t *shader;
     mach_rectangle_t *rect;
+    vec4 projection_mat4[4];
 };
 
 mach_renderer_t *mach_renderer_create(int width, int height,
@@ -25,7 +27,7 @@ mach_renderer_t *mach_renderer_create(int width, int height,
     /* now actually create the objects needed to render */
     mach_logger_log(logger, MACH_LOG_INFO,
             "GL Renderer: Creating buffers..");
-    renderer->rect = mach_rectangle_create();
+    renderer->rect = mach_rectangle_create(40, 40, 400, 400);
 
     mach_logger_log(logger, MACH_LOG_INFO,
             "GL Renderer: Creating shaders..");
@@ -48,10 +50,16 @@ mach_renderer_t *mach_renderer_create(int width, int height,
 
     if (error != GL_NO_ERROR) {
         mach_logger_log(logger, MACH_LOG_CRITICAL,
-                "GL Renderer: An OpenGL error has been detected: GL Error %d",
+                "GL Renderer: An OpenGL error has been detected: "
+                "GL Error %d",
                 error);
         return NULL;
     }
+
+    /* now we can set up the projection matrix */
+    glm_ortho(0.0f, (float)width, (float)height,
+            0.0f, 0.0f, 1.0f,
+            renderer->projection_mat4);
 
     return renderer;
 }
@@ -61,10 +69,13 @@ void mach_renderer_draw(mach_renderer_t *self) {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    /* then, we can use the shader program and draw the buffers for each
-       rectangle */
+    /* then, we can use the shader program and assign our projection matrix */
     mach_shader_use(self->shader);
-    mach_rectangle_draw(self->rect);
+    mach_shader_mat4(self->shader, "projection",
+            self->projection_mat4);
+
+    /* ...and draw the buffers for each rectangle */
+    mach_rectangle_draw(self->rect, self->shader);
 
     /* at this point, we've finished drawing on the back buffer, so it's now up
        to the application to swap the buffers after this function call. */

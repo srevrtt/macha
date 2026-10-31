@@ -156,12 +156,18 @@ void mach_mac_window_gl_swap(mach_mac_window_t *window) {
 void mach_mac_window_fb_size(mach_mac_window_t *window, int *width,
         int *height) {
     @autoreleasepool {
-        NSView *content_view = [window->ns_window contentView];
-        NSRect bounds = [content_view bounds];
-        NSRect backingBounds = [content_view convertRectToBacking:bounds];
+        NSRect window_frame = [window->ns_window frame];
+        NSRect content_rect = [window->ns_window
+            contentRectForFrameRect:window_frame];
+        NSSize logical_size = content_rect.size;
 
-        *width = backingBounds.size.width;
-        *height = backingBounds.size.height;
+        /* account for high-DPI screens */
+        CGFloat scale_factor = [window->ns_window backingScaleFactor];
+        NSSize physical_size = NSMakeSize(logical_size.width * scale_factor,
+                logical_size.height * scale_factor);
+
+        *width = physical_size.width;
+        *height = physical_size.height;
     }
 }
 

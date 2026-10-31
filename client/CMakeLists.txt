@@ -29,6 +29,7 @@ endif()
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
     set(SAN_FLAGS
         -fsanitize=address
+        -fsanitize=undefined
         -fno-omit-frame-pointer
         -g
     )
