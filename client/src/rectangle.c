@@ -12,10 +12,10 @@ struct mach_rectangle_t {
     unsigned int vertex_array;
 
     vec4 model[4];
-    int x;
-    int y;
-    int w;
-    int h;
+    float x;
+    float y;
+    float w;
+    float h;
 };
 
 mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h) {
@@ -71,22 +71,24 @@ mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h) {
 void mach_rectangle_transform(mach_rectangle_t *self, int x, int y, int w,
         int h) {
     /* set the properties */
-    self->x = x;
-    self->y = y;
-    self->w = w;
-    self->h = h;
-
-    // TODO: actually abide by what the comment says? lol
+    if (x != -1) self->x = (float)x;
+    if (y != -1) self->y = (float)y;
+    if (w != -1) self->w = (float)w;
+    if (h != -1) self->h = (float)h;
 
     glm_mat4_identity(self->model);
 
+    /* note: the reason why we're adding an offset is because, for some reason
+       (still not sure?), whenever an OpenGL context is created, each object is
+       center-aligned, which is not really what we want in this case, so that
+       means that this is just a workaround :D */
     vec3 translation = {
-        (float)x + (float)w * 0.5f, (float)y + (float)h * 0.5f, 0.0f
+        self->x + self->w * 0.5f, self->y + self->h * 0.5f, 0.0f
     };
     glm_translate(self->model, translation);
 
     vec3 scale = {
-        (float)w, (float)h, 0.0f
+        self->w, self->h, 0.0f
     };
     glm_scale(self->model, scale);
 }
