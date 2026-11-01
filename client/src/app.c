@@ -7,11 +7,14 @@
 #include "include/window.h"
 #include "include/logger.h"
 #include "include/renderer.h"
+#include "include/rectangle.h"
 
 struct mach_app_t {
     mach_logger_t *logger;
     mach_window_t *window;
     mach_renderer_t *renderer;
+    mach_rectangle_t *test_rect;
+    mach_rectangle_t *test_rect2;
 };
 
 mach_app_t *mach_app_create() {
@@ -38,6 +41,7 @@ mach_app_t *mach_app_create() {
 
     /* window error handling (if applicable) */
     char *window_create_flag = mach_logger_get_flag(app->logger, NULL);
+
     if (window_create_flag && strcmp(window_create_flag,
                 "WINDOW_CREATION_FAILED")) {
         mach_logger_log(app->logger, MACH_LOG_ERROR,
@@ -68,6 +72,18 @@ mach_app_t *mach_app_create() {
     /* otherwise, we're all good! */
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "The application renderer has been initialized successully");
+
+    /* now, we can create all of the UI objects */
+    mach_logger_log(app->logger, MACH_LOG_INFO,
+            "Initializing the UI..");
+
+    app->test_rect = mach_rectangle_create(10, 10, 300, 300);
+    mach_renderer_add_rect(app->renderer, app->logger,
+            app->test_rect);
+
+    app->test_rect2 = mach_rectangle_create(320, 10, 300, 300);
+    mach_renderer_add_rect(app->renderer, app->logger,
+            app->test_rect2);
 
     return app;
 }
