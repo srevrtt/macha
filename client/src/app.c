@@ -77,11 +77,11 @@ mach_app_t *mach_app_create() {
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Initializing the UI..");
 
-    app->test_rect = mach_rectangle_create(10, 10, 300, 300);
+    app->test_rect = mach_rectangle_create(10, 10, 300, 300, 50);
     mach_renderer_add_rect(app->renderer, app->logger,
             app->test_rect);
 
-    app->test_rect2 = mach_rectangle_create(320, 10, 300, 300);
+    app->test_rect2 = mach_rectangle_create(320, 10, 300, 300, 100);
     mach_renderer_add_rect(app->renderer, app->logger,
             app->test_rect2);
 

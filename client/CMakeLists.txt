@@ -52,8 +52,8 @@ set(SRCS
 
 # Relative to ./res/shaders/
 set(SHADER_SRCS
-    square.vert
-    square.frag
+    rect.vert
+    rect.frag
 )
 
 add_executable(macha_client ${SRCS})

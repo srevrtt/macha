@@ -127,6 +127,16 @@ void mach_shader_vec3(mach_shader_t *self, const char *name, vec3 v) {
     glUniform3fv(location, 1, v);
 }
 
+void mach_shader_vec2(mach_shader_t *self, const char *name, vec2 v) {
+    int location = glGetUniformLocation(self->shader, name);
+    glUniform2fv(location, 1, v);
+}
+
+void mach_shader_float(mach_shader_t *self, const char *name, float f) {
+    int location = glGetUniformLocation(self->shader, name);
+    glUniform1f(location, f);
+}
+
 /* simply calls `glUseProgram` on the internal shader program */
 void mach_shader_use(mach_shader_t *self) {
     glUseProgram(self->shader);

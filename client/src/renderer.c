@@ -8,8 +8,8 @@
 #include "include/shader.h"
 #include "include/rectangle.h"
 
-#include "include/shaders/square.vert.h"
-#include "include/shaders/square.frag.h"
+#include "include/shaders/rect.vert.h"
+#include "include/shaders/rect.frag.h"
 
 struct mach_renderer_t {
     mach_shader_t *shader;
@@ -52,10 +52,10 @@ mach_renderer_t *mach_renderer_create(int width, int height,
     mach_logger_log(logger, MACH_LOG_INFO,
             "GL Renderer: Creating shaders..");
     renderer->shader = mach_shader_create(logger,
-            ___res_shaders_square_vert,
-            ___res_shaders_square_frag,
-            ___res_shaders_square_vert_len,
-            ___res_shaders_square_frag_len);
+            ___res_shaders_rect_vert,
+            ___res_shaders_rect_frag,
+            ___res_shaders_rect_vert_len,
+            ___res_shaders_rect_frag_len);
 
     /* handle errors if the shader creation failed */
     if (renderer->shader == NULL) {

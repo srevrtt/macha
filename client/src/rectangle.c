@@ -16,21 +16,31 @@ struct mach_rectangle_t {
     float y;
     float w;
     float h;
+
+    float corner_radius;
+    vec2 rect_size;
 };
 
-mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h) {
+/* note: a corner radius of 0 means a non-rounded rectangle */
+mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h,
+        int corner_radius) {
     mach_rectangle_t *rect = malloc(sizeof(mach_rectangle_t));
+
+    /* save the crucial data we need while we have it */
+    rect->corner_radius = (float)corner_radius;
+    vec2 size = { w, h };
+    glm_vec2_copy(size, rect->rect_size);
 
     /* start shipping the following buffer data with a VAO */
     glGenVertexArrays(1, &rect->vertex_array);
     glBindVertexArray(rect->vertex_array);
 
-    /* define the vertex and index data on the CPU */
+    /* define the vertex, UV, and index data on the CPU */
     float vertices[] = {
-        0.5f, -0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
+        0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
+        0.5f, 0.5f, 0.0f,       1.0f, 1.0f,
+        -0.5f, 0.5f, 0.0f,      0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f,     0.0f, 0.0f
     };
 
     unsigned int indices[] = {
@@ -53,9 +63,14 @@ mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h) {
 
     /* finally, actually tell OpenGL about how to use the VAO */
     glVertexAttribPointer(0, 3, GL_FLOAT,
-            GL_FALSE, 3 * sizeof(float),
+            GL_FALSE, 5 * sizeof(float),
             (void*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT,
+            GL_FALSE, 5 * sizeof(float),
+            (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     /* now, we can initialize the model matrix & configure it to the size that
        was requested (this does happen again every time we update as well) */
@@ -96,7 +111,18 @@ void mach_rectangle_transform(mach_rectangle_t *self, int x, int y, int w,
 /* draws the rectangle to the renderer; make sure the shader has been enabled/
    "used" before calling this */
 void mach_rectangle_draw(mach_rectangle_t *self, mach_shader_t *shader) {
+    /* model matrix */
     mach_shader_mat4(shader, "model", self->model);
+
+    /* color data */
+    vec3 color = { 1.0f, 1.0f, 1.0f };
+    mach_shader_vec3(shader, "u_color", color);
+
+    /* corner radius */
+    mach_shader_float(shader, "u_radius", self->corner_radius);
+
+    /* size (width, height; for fragment shader) */
+    mach_shader_vec2(shader, "u_size", self->rect_size);
 
     glBindVertexArray(self->vertex_array);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT,
