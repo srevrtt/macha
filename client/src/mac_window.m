@@ -85,8 +85,11 @@ mach_mac_window_t *mach_mac_window_create(mach_logger_t *logger, int width,
             return NULL;
         }
 
+        /* initialize and properly set the delegate */
+        MachaWindowDelegate *delegate = [[MachaWindowDelegate alloc] init];
+        [window->ns_window setDelegate:delegate];
+
         /* window configuration */
-        [window->ns_window setDelegate:[MachaWindowDelegate alloc]];
         [window->ns_window setTitle:[NSString stringWithUTF8String:title]];
         [window->ns_window makeKeyAndOrderFront:nil];
         [window->ns_window orderFrontRegardless];
@@ -177,18 +180,38 @@ int mach_mac_window_should_close(mach_mac_window_t *window) {
 }
 
 void mach_mac_window_poll(mach_mac_window_t *window) {
-    NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny
-                                untilDate:nil
-                                inMode:NSDefaultRunLoopMode
-                                dequeue:(YES)];
-    [NSApp sendEvent:event];
-    [NSApp updateWindows];
+    @autoreleasepool {
+        for (;;) {
+            NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny
+                                    untilDate:nil
+                                    inMode:NSDefaultRunLoopMode
+                                    dequeue:(YES)];
+
+            if (event == nil) {
+                break;
+            }
+
+            [NSApp sendEvent:event];
+        }
+    }
 }
 
 void mach_mac_window_destroy(mach_mac_window_t *window) {
-    if (![window->ns_window isVisible]) {
-        [window->ns_window close];
-        [NSApp terminate:nil];
+    if (window == NULL) return;
+
+    @autoreleasepool {
+        if (window->ns_glctx) {
+            [NSOpenGLContext clearCurrentContext];
+            window->ns_glctx = nil;
+        }
+
+        if (window->ns_window) {
+            [window->ns_window setDelegate:nil];
+            [window->ns_window close];
+            window->ns_window = nil;
+        }
     }
+
+    free(window);
 }
 

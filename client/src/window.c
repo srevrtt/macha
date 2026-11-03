@@ -60,8 +60,11 @@ void mach_window_swap_buffers(mach_window_t *self) {
 
 /* frees and destroys the window object w/ double-free checking */
 void mach_window_destroy(mach_window_t *self) {
+    if (self) {
 #if defined(__APPLE__) && defined(__MACH__)
-    mach_mac_window_destroy(self->handle);
+        mach_mac_window_destroy(self->handle);
 #endif
-}
 
+        free(self);
+    }
+}

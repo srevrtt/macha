@@ -27,6 +27,10 @@ mach_renderer_t *mach_renderer_create(int width, int height,
     /* set the OpenGL viewport */
     glViewport(0, 0, width, height);
 
+    /* enable the OpenGL features we need */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     /* now, we can initialize our component lists */
     mach_logger_log(logger, MACH_LOG_INFO,
             "GL Renderer: Initializing CPU data buffers...");

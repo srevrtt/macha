@@ -34,6 +34,8 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
         -g
     )
 
+    set(SAN_FLAGS "")
+
     add_compile_options(${SAN_FLAGS})
     add_link_options(${SAN_FLAGS})
 endif()
