@@ -5,6 +5,7 @@
 
 #include "include/shader.h"
 #include "include/rectangle.h"
+#include "include/utils.h"
 
 struct mach_rectangle_t {
     unsigned int vertex_buffer;
@@ -19,11 +20,12 @@ struct mach_rectangle_t {
 
     float corner_radius;
     vec2 rect_size;
+    vec3 color;
 };
 
 /* note: a corner radius of 0 means a non-rounded rectangle */
 mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h,
-        int corner_radius) {
+        int corner_radius, unsigned int color) {
     mach_rectangle_t *rect = malloc(sizeof(mach_rectangle_t));
 
     /* save the crucial data we need while we have it */
@@ -76,6 +78,9 @@ mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h,
        was requested (this does happen again every time we update as well) */
     mach_rectangle_transform(rect, x, y, w, h);
 
+    /* finally, we can set the color */
+    mach_color_from_hex(color, rect->color);
+
     return rect;
 }
 
@@ -108,6 +113,10 @@ void mach_rectangle_transform(mach_rectangle_t *self, int x, int y, int w,
     glm_scale(self->model, scale);
 }
 
+void mach_rectangle_set_color(mach_rectangle_t *self, unsigned int color) {
+    mach_color_from_hex(color, self->color);
+}
+
 /* draws the rectangle to the renderer; make sure the shader has been enabled/
    "used" before calling this */
 void mach_rectangle_draw(mach_rectangle_t *self, mach_shader_t *shader) {
@@ -115,8 +124,7 @@ void mach_rectangle_draw(mach_rectangle_t *self, mach_shader_t *shader) {
     mach_shader_mat4(shader, "model", self->model);
 
     /* color data */
-    vec3 color = { 1.0f, 1.0f, 1.0f };
-    mach_shader_vec3(shader, "u_color", color);
+    mach_shader_vec3(shader, "u_color", self->color);
 
     /* corner radius */
     mach_shader_float(shader, "u_radius", self->corner_radius);

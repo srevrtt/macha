@@ -41,6 +41,7 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 set(SRCS
+    src/utils.c
     src/renderer.c
     src/rectangle.c
     src/shader.c
