@@ -41,6 +41,7 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 set(SRCS
+    src/table/header.c
     src/utils.c
     src/renderer.c
     src/rectangle.c
@@ -81,6 +82,6 @@ add_custom_target(run_shader_conversion
 
 add_dependencies(macha_client run_shader_conversion)
 
-target_include_directories(macha_client PRIVATE external/)
+target_include_directories(macha_client PRIVATE external/ src/include/)
 target_link_libraries(macha_client PRIVATE PkgConfig::cglm ${APPLE_FRAMEWORKS})
 

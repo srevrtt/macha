@@ -7,14 +7,14 @@
 #include "include/window.h"
 #include "include/logger.h"
 #include "include/renderer.h"
-#include "include/rectangle.h"
+
+#include "table/include/header.h"
 
 struct mach_app_t {
     mach_logger_t *logger;
     mach_window_t *window;
     mach_renderer_t *renderer;
-    mach_rectangle_t *test_rect;
-    mach_rectangle_t *test_rect2;
+    mach_table_header_t *tbheader;
 };
 
 mach_app_t *mach_app_create() {
@@ -77,15 +77,8 @@ mach_app_t *mach_app_create() {
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Initializing the UI..");
 
-    app->test_rect = mach_rectangle_create(10, 10, 300, 300,
-            50, 0xDD00DD);
-    mach_renderer_add_rect(app->renderer, app->logger,
-            app->test_rect);
-
-    app->test_rect2 = mach_rectangle_create(320, 10, 300, 300,
-            100, 0xFFFFFF);
-    mach_renderer_add_rect(app->renderer, app->logger,
-            app->test_rect2);
+    app->tbheader = mach_table_header_create(app->logger,
+            app->renderer);
 
     return app;
 }
