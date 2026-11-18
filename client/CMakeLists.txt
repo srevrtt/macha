@@ -41,6 +41,7 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 set(SRCS
+    src/table/column.c
     src/table/header.c
     src/utils.c
     src/renderer.c
