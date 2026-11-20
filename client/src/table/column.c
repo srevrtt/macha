@@ -22,6 +22,11 @@ mach_table_column_t *mach_table_column_create(const char *name,
         mach_table_column_type_t type, const char *formula) {
     mach_table_column_t *column = malloc(sizeof(mach_table_column_t));
 
+    /* initialize the column data */
+    // TODO: consider a resizable string for memory usage limitation
+    column->formula = malloc(512 * sizeof(char));
+    column->name = malloc(128 * sizeof(char));
+
     /* insert the data */
     mach_table_column_update(column, name, type, formula);
 
@@ -34,13 +39,13 @@ mach_table_column_t *mach_table_column_create(const char *name,
 void mach_table_column_update(mach_table_column_t *self, const char *name,
         mach_table_column_type_t type, const char *formula) {
     if (name) {
-        /* name can be a maximum of 1024 bytes (1KB) total */
-        strncpy(self->name, name, 1023);
+        /* name can be a maximum of 128 bytes total */
+        strncpy(self->name, name, 127);
     }
 
     if (formula) {
-        /* formula can be a maximum of 16384 bytes (16KB) total */
-        strncpy(self->formula, formula, 16383);
+        /* formula can be a maximum of 512 bytes total */
+        strncpy(self->formula, formula, 511);
     }
 
     if (type > -1) {
