@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
 cmake_pkg_config(IMPORT cglm REQUIRED)
+cmake_pkg_config(IMPORT freetype2 REQUIRED)
 
 set(EXTERNAL_SRCS
 	external/glad/glad.c
@@ -41,6 +42,7 @@ endif()
 set(SRCS
     src/table/column.c
     src/table/header.c
+    src/font.c
     src/utils.c
     src/renderer.c
     src/rectangle.c
@@ -82,5 +84,5 @@ add_custom_target(run_shader_conversion
 add_dependencies(macha_client run_shader_conversion)
 
 target_include_directories(macha_client PRIVATE external/ src/include/)
-target_link_libraries(macha_client PRIVATE PkgConfig::cglm ${APPLE_FRAMEWORKS})
+target_link_libraries(macha_client PRIVATE PkgConfig::cglm PkgConfig::freetype2 ${APPLE_FRAMEWORKS})
 
