@@ -77,8 +77,7 @@ mach_app_t *mach_app_create() {
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Initializing the UI..");
 
-    app->tbheader = mach_table_header_create(app->logger,
-            app->renderer);
+    app->tbheader = mach_table_header_create(app->logger, app->renderer);
 
     return app;
 }
