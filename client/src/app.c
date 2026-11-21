@@ -7,6 +7,8 @@
 #include "include/window.h"
 #include "include/logger.h"
 #include "include/renderer.h"
+#include "include/font_lib.h"
+#include "include/font.h"
 
 #include "table/include/header.h"
 
@@ -14,6 +16,8 @@ struct mach_app_t {
     mach_logger_t *logger;
     mach_window_t *window;
     mach_renderer_t *renderer;
+    mach_font_lib_t *font_lib;
+    mach_font_t *test_font;
     mach_table_header_t *tbheader;
 };
 
@@ -77,6 +81,16 @@ mach_app_t *mach_app_create() {
     mach_logger_log(app->logger, MACH_LOG_INFO,
             "Initializing the UI..");
 
+    /* font loading */
+
+    mach_logger_log(app->logger, MACH_LOG_INFO,
+            "Loading fonts..");
+    app->font_lib = mach_font_lib_create(app->logger);
+    app->test_font = mach_font_create(app->font_lib, app->logger,
+            "res/fonts/arial.ttf", 30);
+
+    /* UI object creation */
+
     app->tbheader = mach_table_header_create(app->logger, app->renderer);
 
     return app;
@@ -96,6 +110,9 @@ void mach_app_run(mach_app_t *self) {
 
 void mach_app_destroy(mach_app_t *self) {
     if (self) {
+        /* mach_table_header_destroy(self->tbheader); */
+        mach_font_destroy(self->test_font);
+        mach_font_lib_destroy(self->font_lib);
         mach_renderer_destroy(self->renderer);
         mach_window_destroy(self->window);
         mach_logger_destroy(self->logger);
