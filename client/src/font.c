@@ -48,8 +48,11 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
         return NULL;
     }
 
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     /* set the font size */
     FT_Set_Pixel_Sizes(face, 0, font_size);
+
 
     /* create the font object */
     mach_font_t *font = malloc(sizeof(mach_font_t));
@@ -132,6 +135,7 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
                 face->glyph->bitmap.buffer,
                 face->glyph->bitmap.pitch * face->glyph->bitmap.rows);
         current_width += face->glyph->bitmap.width;
+        atlas_buf_mem_used += face->glyph->bitmap.pitch * face->glyph->bitmap.rows;
     }
 
     /* check to see if an allocation failed */
@@ -141,10 +145,12 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
         return NULL;
     }
 
+    float map_width = current_width;
+    ivec2 atlas_size = { map_width, font_size };
+    glm_ivec2_copy(atlas_size, font->atlas_size);
+
     /* next up, let's upload the UV (and vertex) coordinates, now that we know
        the total width of the atlas */
-    float map_width = current_width;
-
     for (int i = 0; i < font->char_map_len; i++) {
         float offset = font->offsets[i];
         float width = font->sizes[i][0];
@@ -167,10 +173,11 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
                 sizeof(vertex_data));
     }
 
-    /* let's finally finish it up and create the texture! */
-    ivec2 atlas_size = { current_width, font_size };
-    glm_ivec2_copy(atlas_size, font->atlas_size);
+    /* initialize the OpenGL objects we need */
+    glGenVertexArrays(1, &font->vao);
+    glBindVertexArray(font->vao);
 
+    /* let's finally finish it up and create the texture! */
     glGenTextures(1, &font->atlas_tex);
     glBindTexture(GL_TEXTURE_2D, font->atlas_tex);
 
@@ -188,20 +195,6 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
             atlas_size[0], atlas_size[1], 0,
             GL_RED, GL_UNSIGNED_BYTE, font->atlas_buf);
-
-    /* initialize the OpenGL objects we need */
-    glGenVertexArrays(1, &font->vao);
-    glBindVertexArray(font->vao);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT,
-            GL_FALSE, 4 * sizeof(float),
-            (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT,
-            GL_FALSE, 4 * sizeof(float),
-            (void*)(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 
     /* create the shader */
     font->shader = mach_shader_create(logger,
@@ -221,12 +214,23 @@ void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
         const char *text) {
     mach_shader_use(self->shader);
     glBindVertexArray(self->vao);
-    glBindTexture(GL_TEXTURE_2D, self->atlas_tex);
+    glBindTexture(GL_TEXTURE_2D, self->atlas_tex);\
 
     /* upload the text color */
     vec3 text_color;
     mach_color_from_hex(color, text_color);
     mach_shader_vec3(self->shader, "f_textColor", text_color);
+
+    /* create the model matrix */
+    mat4 model;
+    glm_mat4_identity(model);
+    vec3 translation = { x, y, 0.0f };
+    glm_translate(model, translation);
+
+    /* upload the model and projection matrices */
+    mach_shader_mat4(self->shader, "model", model);
+    mach_shader_mat4(self->shader, "projection",
+            self->projection);
 
     /* upload the already defined vertex data for our character */
     char c = 'X';
@@ -245,6 +249,17 @@ void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
             6 * sizeof(unsigned int), self->atlas_indices,
             GL_STATIC_DRAW);
 
+    glVertexAttribPointer(0, 2, GL_FLOAT,
+            GL_FALSE, 4 * sizeof(float),
+            (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT,
+            GL_FALSE, 4 * sizeof(float),
+            (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    /* now we can draw! */
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT,
             0);
 }

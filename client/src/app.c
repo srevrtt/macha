@@ -96,7 +96,8 @@ mach_app_t *mach_app_create() {
 
     /* UI object creation */
 
-    app->tbheader = mach_table_header_create(app->logger, app->renderer);
+    app->tbheader = mach_table_header_create(app->logger,
+            app->renderer);
 
     return app;
 }
@@ -107,6 +108,8 @@ void mach_app_run(mach_app_t *self) {
 
         /* draw the objects on the back buffer */
         mach_renderer_draw(self->renderer);
+        mach_font_draw_text(self->test_font, 100, 500,
+                0xFFFFFF, "Hello world!");
 
         /* swap the buffers to render the objects */
         mach_window_swap_buffers(self->window);

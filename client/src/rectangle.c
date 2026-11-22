@@ -39,10 +39,10 @@ mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h,
 
     /* define the vertex, UV, and index data on the CPU */
     float vertices[] = {
-        0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
-        0.5f, 0.5f, 0.0f,       1.0f, 1.0f,
-        -0.5f, 0.5f, 0.0f,      0.0f, 1.0f,
-        -0.5f, -0.5f, 0.0f,     0.0f, 0.0f
+        0.5f, -0.5f,      1.0f, 0.0f,
+        0.5f, 0.5f,       1.0f, 1.0f,
+        -0.5f, 0.5f,      0.0f, 1.0f,
+        -0.5f, -0.5f,     0.0f, 0.0f
     };
 
     unsigned int indices[] = {
@@ -64,14 +64,14 @@ mach_rectangle_t *mach_rectangle_create(int x, int y, int w, int h,
             indices, GL_STATIC_DRAW);
 
     /* finally, actually tell OpenGL about how to use the VAO */
-    glVertexAttribPointer(0, 3, GL_FLOAT,
-            GL_FALSE, 5 * sizeof(float),
+    glVertexAttribPointer(0, 2, GL_FLOAT,
+            GL_FALSE, 4 * sizeof(float),
             (void*)0);
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(1, 2, GL_FLOAT,
-            GL_FALSE, 5 * sizeof(float),
-            (void*)(3 * sizeof(float)));
+            GL_FALSE, 4 * sizeof(float),
+            (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     /* now, we can initialize the model matrix & configure it to the size that
