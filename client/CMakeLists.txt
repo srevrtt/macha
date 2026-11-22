@@ -58,6 +58,8 @@ set(SRCS
 
 # Relative to ./res/shaders/
 set(SHADER_SRCS
+    text.vert
+    text.frag
     rect.vert
     rect.frag
 )

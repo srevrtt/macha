@@ -3,6 +3,7 @@
 #include <ft2build.h>
 #include <freetype/freetype.h>
 #include <cglm/cglm.h>
+#include <glad/glad.h>
 
 #include "include/logger.h"
 #include "include/font.h"
@@ -15,6 +16,8 @@ struct mach_font_t {
     unsigned int *advances;
     ivec2 *sizes;
     ivec2 *bearings;
+
+    unsigned int atlas_tex;
     unsigned char *atlas_buf;
     ivec2 atlas_size;
 };
@@ -150,9 +153,27 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
         return NULL;
     }
 
-    /* let's finally finish it up! */
+    /* let's finally finish it up and create the texture! */
     ivec2 atlas_size = { current_width, font_size };
     glm_ivec2_copy(atlas_size, font->atlas_size);
+
+    glGenTextures(1, &font->atlas_tex);
+    glBindTexture(GL_TEXTURE_2D, font->atlas_tex);
+
+    /* texture options */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+            GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+            GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+            GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+            GL_LINEAR);
+
+    /* generate the texture */
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
+            atlas_size[0], atlas_size[1], 0,
+            GL_RED, GL_UNSIGNED_BYTE, font->atlas_buf);
 
     return font;
 }
