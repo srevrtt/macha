@@ -109,7 +109,7 @@ void mach_app_run(mach_app_t *self) {
         /* draw the objects on the back buffer */
         mach_renderer_draw(self->renderer);
         mach_font_draw_text(self->test_font, 100, 500,
-                0xFFFFFF, "Hello world!");
+                0xFFFFFF, "Hello world! The quick brown fox jumped over the lazy dog.");
 
         /* swap the buffers to render the objects */
         mach_window_swap_buffers(self->window);
