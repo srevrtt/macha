@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include <freetype/freetype.h>
+#include <glad/glad.h>
 
 #include "include/logger.h"
 #include "include/font_lib.h"
@@ -19,6 +20,8 @@ mach_font_lib_t *mach_font_lib_create(mach_logger_t *logger) {
 
     mach_font_lib_t *lib = malloc(sizeof(mach_font_lib_t));
     lib->ft = ft;
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     return lib;
 }

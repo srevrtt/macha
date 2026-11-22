@@ -88,6 +88,11 @@ mach_app_t *mach_app_create() {
     app->font_lib = mach_font_lib_create(app->logger);
     app->test_font = mach_font_create(app->font_lib, app->logger,
             "res/fonts/arial.ttf", 30);
+    if (!app->test_font) {
+        mach_logger_log(app->logger, MACH_LOG_CRITICAL,
+                "Failed to load fonts");
+        return NULL;
+    }
 
     /* UI object creation */
 
