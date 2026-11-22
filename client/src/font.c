@@ -48,11 +48,8 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
         return NULL;
     }
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
     /* set the font size */
     FT_Set_Pixel_Sizes(face, 0, font_size);
-
 
     /* create the font object */
     mach_font_t *font = malloc(sizeof(mach_font_t));
@@ -67,28 +64,66 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
     font->bearings = malloc(char_map_size * sizeof(ivec2));
     font->vertex_data = malloc(char_map_size * 16 * sizeof(float));
 
-    /* start with 1KiB */
-    size_t atlas_buf_mem_size = 1024;
+    /* start with 2KiB */
+    size_t atlas_buf_mem_size = 2048;
     size_t atlas_buf_mem_used = 0;
     font->atlas_buf = malloc(atlas_buf_mem_size);
 
     /* create and copy the indices (they're the same for every character) */
     unsigned int atlas_indices[] = {
         0, 1, 3,
-        1, 2, 3
+        2, 1, 3
     };
 
     font->atlas_indices = malloc(sizeof(atlas_indices));
     memcpy(font->atlas_indices, atlas_indices,
             sizeof(atlas_indices));
 
-    int current_width = 0;
+    int atlas_width = 0;
+    int atlas_height = 0;
 
-    /* now, we can create the texture atlas with a default en-us charset */
-    bool failed_alloc = false;
+    /* first, let's make a pass to determine the width and height of the
+       atlas */
     for (char c = 33; c < 127; c++) {
         // TODO: Use FT_Load_Glyph instead
-        if (FT_Load_Char(font->face, c,
+        if (FT_Load_Char(face, c,
+                    FT_LOAD_RENDER)) {
+            mach_logger_log(logger, MACH_LOG_WARN,
+                    "Failed to load character %c at font path %s.", c,
+                    font_path);
+            continue;
+        }
+
+        atlas_width += face->glyph->bitmap.width;
+        atlas_height = (face->glyph->bitmap.rows > atlas_height) ?
+            face->glyph->bitmap.rows : atlas_height;
+    }
+
+    /* now, we can create the texture atlas with a default en-us charset */
+    glGenTextures(1, &font->atlas_tex);
+    glBindTexture(GL_TEXTURE_2D, font->atlas_tex);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8,
+            atlas_width, atlas_height, 0,
+            GL_RED, GL_UNSIGNED_BYTE, NULL);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    /* texture options */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+            GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+            GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+            GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+            GL_LINEAR);
+
+    bool failed_alloc = false;
+    int current_x = 0;
+
+    for (char c = 33; c < 127; c++) {
+        // TODO: Use FT_Load_Glyph instead
+        if (FT_Load_Char(face, c,
                     FT_LOAD_RENDER)) {
             mach_logger_log(logger, MACH_LOG_WARN,
                     "Failed to load character %c at font path %s.", c,
@@ -99,9 +134,14 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
         /* append the data */
         int idx = c - 33;
 
+        glTexSubImage2D(GL_TEXTURE_2D, 0, current_x,
+                0, face->glyph->bitmap.width,
+                face->glyph->bitmap.rows, GL_RED,
+                GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+
         font->char_map[idx] = c;
         font->advances[idx] = face->glyph->advance.x;
-        font->offsets[idx] = current_width;
+        font->offsets[idx] = current_x;
 
         /* font size */
         ivec2 size = {
@@ -117,25 +157,25 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
 
         font->char_map_len++;
 
-        /* resize buffer if needed */
-        if (atlas_buf_mem_used >= atlas_buf_mem_size) {
-            atlas_buf_mem_size *= 2;
-            void *tmp = realloc(font->atlas_buf,
-                    atlas_buf_mem_size);
+        /* vertex data */
+        float u_min = (float)current_x / atlas_width;
+        float u_max = (float)(current_x + face->glyph->bitmap.width)
+            / atlas_width;
+        float v_min = 0.0f;
+        float v_max = (float)face->glyph->bitmap.rows / atlas_height;
 
-            if (!tmp) {
-                failed_alloc = true;
-                break;
-            }
-            font->atlas_buf = tmp;
-        }
+        float vertex_data[] = {
+            0.5f, -0.5f,        u_max, v_min,
+            0.5f, 0.5f,         u_max, v_max,
+            -0.5f, 0.5f,        u_min, v_max,
+            -0.5f, -0.5f,       u_min, v_min
+        };
 
-        /* now we can append the buffer data */
-        memcpy(font->atlas_buf + sizeof(atlas_buf_mem_used),
-                face->glyph->bitmap.buffer,
-                face->glyph->bitmap.pitch * face->glyph->bitmap.rows);
-        current_width += face->glyph->bitmap.width;
-        atlas_buf_mem_used += face->glyph->bitmap.pitch * face->glyph->bitmap.rows;
+        font->vertex_data[idx] = malloc(sizeof(vertex_data));
+        memcpy(font->vertex_data[idx], vertex_data,
+                sizeof(vertex_data));
+
+        current_x += face->glyph->bitmap.width;
     }
 
     /* check to see if an allocation failed */
@@ -145,56 +185,12 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
         return NULL;
     }
 
-    float map_width = current_width;
-    ivec2 atlas_size = { map_width, font_size };
+    ivec2 atlas_size = { atlas_width, atlas_height };
     glm_ivec2_copy(atlas_size, font->atlas_size);
-
-    /* next up, let's upload the UV (and vertex) coordinates, now that we know
-       the total width of the atlas */
-    for (int i = 0; i < font->char_map_len; i++) {
-        float offset = font->offsets[i];
-        float width = font->sizes[i][0];
-        float height = font->sizes[i][1];
-        float x_bearing = font->bearings[i][0];
-        float y_bearing = font->bearings[i][1];
-
-        float right_uv = (offset + width) / current_width;
-        float left_uv = offset / current_width;
-
-        float vertex_data[] = {
-            0.5f, -0.5f,        right_uv, 0.0f,
-            0.5f, 0.5f,         right_uv, 1.0f,
-            -0.5f, 0.5f,        left_uv, 1.0f,
-            -0.5f, -0.5f,       left_uv, 0.0f
-        };
-
-        font->vertex_data[i] = malloc(sizeof(vertex_data));
-        memcpy(font->vertex_data[i], vertex_data,
-                sizeof(vertex_data));
-    }
 
     /* initialize the OpenGL objects we need */
     glGenVertexArrays(1, &font->vao);
     glBindVertexArray(font->vao);
-
-    /* let's finally finish it up and create the texture! */
-    glGenTextures(1, &font->atlas_tex);
-    glBindTexture(GL_TEXTURE_2D, font->atlas_tex);
-
-    /* texture options */
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-            GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-            GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-            GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-            GL_LINEAR);
-
-    /* generate the texture */
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED,
-            atlas_size[0], atlas_size[1], 0,
-            GL_RED, GL_UNSIGNED_BYTE, font->atlas_buf);
 
     /* create the shader */
     font->shader = mach_shader_create(logger,
@@ -214,7 +210,10 @@ void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
         const char *text) {
     mach_shader_use(self->shader);
     glBindVertexArray(self->vao);
-    glBindTexture(GL_TEXTURE_2D, self->atlas_tex);\
+    glBindTexture(GL_TEXTURE_2D, self->atlas_tex);
+
+    char c = 'A';
+    int i = c - 33;
 
     /* upload the text color */
     vec3 text_color;
@@ -224,8 +223,11 @@ void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
     /* create the model matrix */
     mat4 model;
     glm_mat4_identity(model);
+
     vec3 translation = { x, y, 0.0f };
+    vec3 scale = { self->sizes[i][0], self->sizes[i][1], 0.0f };
     glm_translate(model, translation);
+    glm_scale(model, scale);
 
     /* upload the model and projection matrices */
     mach_shader_mat4(self->shader, "model", model);
@@ -233,14 +235,12 @@ void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
             self->projection);
 
     /* upload the already defined vertex data for our character */
-    char c = 'X';
-    int i = c - 33;
-
     unsigned int vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float),
             self->vertex_data[i], GL_STATIC_DRAW);
+
 
     unsigned int ebo;
     glGenBuffers(1, &ebo);
