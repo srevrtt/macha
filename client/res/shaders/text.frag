@@ -1,6 +1,6 @@
 #version 330 core
 
-in vec4 v_uv;
+in vec2 v_uv;
 out vec4 fragColor;
 
 uniform sampler2D text;

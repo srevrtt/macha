@@ -135,6 +135,10 @@ void mach_renderer_draw(mach_renderer_t *self) {
        to the application to swap the buffers after this function call. */
 }
 
+vec4 *mach_renderer_get_projection(mach_renderer_t *self) {
+    return self->projection_mat4;
+}
+
 void mach_renderer_destroy(mach_renderer_t *self) {
     if (self) {
         mach_shader_destroy(self->shader);
