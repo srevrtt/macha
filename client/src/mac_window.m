@@ -151,7 +151,9 @@ void mach_mac_window_gl_init(mach_logger_t *logger,
 
 /* swaps the front and back buffers for rendering */
 void mach_mac_window_gl_swap(mach_mac_window_t *window) {
-    [window->ns_glctx flushBuffer];
+    @autoreleasepool {
+        [window->ns_glctx flushBuffer];
+    }
 }
 
 /* gets the drawable size in pixels; this is due to the behavior of Apple's

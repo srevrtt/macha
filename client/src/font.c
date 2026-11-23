@@ -62,7 +62,7 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
     font->offsets = malloc(char_map_size * sizeof(int));
     font->sizes = malloc(char_map_size * sizeof(ivec2));
     font->bearings = malloc(char_map_size * sizeof(ivec2));
-    font->vertex_data = malloc(char_map_size * 16 * sizeof(float));
+    font->vertex_data = malloc(char_map_size * sizeof(void*));
 
     /* start with 2KiB */
     size_t atlas_buf_mem_size = 2048;
@@ -275,8 +275,11 @@ void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
 
             /* advance the X pointer */
             current_x += self->advances[i];
+            glDeleteBuffers(1, &vbo);
         }
     }
+
+    glDeleteBuffers(1, &ebo);
 }
 
 void mach_font_destroy(mach_font_t *self) {
