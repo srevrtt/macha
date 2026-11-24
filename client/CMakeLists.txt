@@ -35,14 +35,14 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
         -g
     )
 
-#add_compile_options(${SAN_FLAGS})
-#add_link_options(${SAN_FLAGS})
+add_compile_options(${SAN_FLAGS})
+add_link_options(${SAN_FLAGS})
 endif()
 
 set(SRCS
     src/table/column.c
     src/table/header.c
-    #src/text.c
+    src/text.c
     src/font_lib.c
     src/font.c
     src/utils.c

@@ -9,6 +9,7 @@
 #include "include/renderer.h"
 #include "include/font_lib.h"
 #include "include/font.h"
+#include "include/text.h"
 
 #include "table/include/header.h"
 
@@ -18,6 +19,7 @@ struct mach_app_t {
     mach_renderer_t *renderer;
     mach_font_lib_t *font_lib;
     mach_font_t *test_font;
+    mach_text_t *test_text;
     mach_table_header_t *tbheader;
 };
 
@@ -93,11 +95,19 @@ mach_app_t *mach_app_create() {
                 "Failed to load fonts");
         return NULL;
     }
+    mach_logger_log(app->logger, MACH_LOG_INFO,
+            "Fonts have loaded successfully");
 
     /* UI object creation */
 
+    app->test_text = mach_text_create(app->test_font, 100,
+            500, "Hello world!");
+
     app->tbheader = mach_table_header_create(app->logger,
             app->renderer);
+
+    mach_logger_log(app->logger, MACH_LOG_INFO,
+            "UI has been loaded successfully");
 
     return app;
 }
@@ -108,8 +118,8 @@ void mach_app_run(mach_app_t *self) {
 
         /* draw the objects on the back buffer */
         mach_renderer_draw(self->renderer);
-        mach_font_draw_text(self->test_font, 100, 500,
-                0xFFFFFF, "Hello world! The quick brown fox jumped over the lazy dog.");
+        mach_text_render(self->test_text, 0xFFFFFF,
+                mach_renderer_get_projection(self->renderer));
 
         /* swap the buffers to render the objects */
         mach_window_swap_buffers(self->window);

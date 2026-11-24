@@ -8,7 +8,6 @@
 #include "include/renderer.h"
 #include "include/font.h"
 #include "include/font_lib.h"
-#include "include/utils.h"
 
 #include "include/shader.h"
 #include "include/shaders/text.vert.h"
@@ -206,80 +205,40 @@ mach_font_t *mach_font_create(mach_font_lib_t *lib, mach_logger_t *logger,
     return font;
 }
 
-void mach_font_draw_text(mach_font_t *self, int x, int y, unsigned int color,
-        const char *text) {
-    mach_shader_use(self->shader);
-    glBindVertexArray(self->vao);
-    glBindTexture(GL_TEXTURE_2D, self->atlas_tex);
+mach_char_info_t mach_font_get_char(mach_font_t *self, char c) {
+    int i = c - 32;
 
-    /* upload the text color */
-    vec3 text_color;
-    mach_color_from_hex(color, text_color);
-    mach_shader_vec3(self->shader, "f_textColor", text_color);
+    vec2 size = { self->sizes[i][0], self->sizes[i][1] };
+    vec2 bearing = { self->bearings[i][0], self->bearings[i][1] };
 
-    /* upload index buffer data */
-    unsigned int ebo;
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-            6 * sizeof(unsigned int), self->atlas_indices,
-            GL_STATIC_DRAW);
+    mach_char_info_t info = {
+        .advance = self->advances[i]
+    };
 
-    /* upload the model matrix */
-    mach_shader_mat4(self->shader, "projection",
-            self->projection);
+    glm_vec2_copy(size, info.size);
+    glm_vec2_copy(bearing, info.bearing);
 
-    int current_x = x;
+    info.vertex_data = malloc(16 * sizeof(float));
+    memcpy(info.vertex_data, self->vertex_data[i], 16 *
+            sizeof(float));
 
-    for (int chr = 0; chr < strlen(text); chr++) {
-        int i = text[chr] - 32;
+    info.index_data = malloc(6 * sizeof(unsigned int));
+    memcpy(info.index_data, self->atlas_indices, 6 *
+            sizeof(unsigned int));
 
-        if (i >= 0) {
-            /* create the model matrix */
-            mat4 model;
-            glm_mat4_identity(model);
+    return info;
+}
 
-            int width = self->sizes[i][0];
-            int height = self->sizes[i][1];
-            int xpos = current_x + self->bearings[i][0];
-            int ypos = y - self->bearings[i][1];
+mach_shader_t *mach_font_get_shader(mach_font_t *self) {
+    return self->shader;
+}
 
-            vec3 translation = { xpos + width * 0.5f, ypos + height * 0.5f, 0.0f };
-            vec3 scale = { width, height, 0.0f };
-            glm_translate(model, translation);
-            glm_scale(model, scale);
+unsigned int mach_font_get_vao(mach_font_t *self) {
+    return self->vao;
+}
 
-            /* upload the model matrix */
-            mach_shader_mat4(self->shader, "model", model);
-
-            /* upload the already defined vertex data for our character */
-            unsigned int vbo;
-            glGenBuffers(1, &vbo);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float),
-                    self->vertex_data[i], GL_STATIC_DRAW);
-
-            glVertexAttribPointer(0, 2, GL_FLOAT,
-                    GL_FALSE, 4 * sizeof(float),
-                    (void*)0);
-            glEnableVertexAttribArray(0);
-
-            glVertexAttribPointer(1, 2, GL_FLOAT,
-                    GL_FALSE, 4 * sizeof(float),
-                    (void*)(2 * sizeof(float)));
-            glEnableVertexAttribArray(1);
-
-            /* now we can draw! */
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT,
-                    0);
-
-            /* advance the X pointer */
-            current_x += self->advances[i];
-            glDeleteBuffers(1, &vbo);
-        }
-    }
-
-    glDeleteBuffers(1, &ebo);
+unsigned int mach_font_get_atlas(mach_font_t *self) {
+    return self->atlas_tex;
 }
 
 void mach_font_destroy(mach_font_t *self) {
