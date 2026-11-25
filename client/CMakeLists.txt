@@ -42,6 +42,7 @@ endif()
 set(SRCS
     src/table/column.c
     src/table/header.c
+    src/text_edit.c
     src/text.c
     src/font_lib.c
     src/font.c
